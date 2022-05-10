@@ -36,7 +36,7 @@ app.post('/meta-data', (req, res) => {
   .write(`/home1/designhub/dh_url_generator/production/dh-url-generator${locationString}`, {Copyright: req.body.copyright, CopyrightNotice: req.body.copyright, Author: req.body.author, XPAuthor: req.body.author, XPComment: req.body.comments })
   .catch((err) => {
     console.error("Something terrible happened: ", err)
-    res.write('<h1>Error</h1><p>Sorry, something went wrong. Please <a href="/">try again</a> or contact admin for help.</p>')
+    res.write('<h1>Error</h1><p>Sorry, something went wrong. Please <a href="/express/metadatagen/">try again</a> or contact admin for help.</p>')
     res.end()
   })
   .finally(() => exiftool.end())
@@ -61,8 +61,8 @@ app.post('/meta-data', (req, res) => {
           <li> Comments: ${req.body.comments}</li>
         </ol>
         <div class="success-message">
-          <a href='/'>Add Data to another file</a>
-          <a href='/validator.html'>Check meta-data</a>
+          <a href='/express/metadatagen/'>Add Data to another file</a>
+          <a href='/express/metadatagen/validator.html'>Check meta-data</a>
       </div>
       </div>
     </body>
@@ -90,7 +90,7 @@ app.post('/meta-read', (req, res) => {
         <div class="container">
           <h1>Meta Data Success</h1>
           <div class="success-message">
-            <a href='/validator.html'>Check another file</a>
+            <a href='express/metadatagen/validator.html'>Check another file</a>
           </div>
           <h2 class="meta-data-title">Data</h2>
         <ul class="meta-data-results">
@@ -115,7 +115,7 @@ app.post('/meta-read', (req, res) => {
     })
     .catch((err) => {
       console.error(`Oops, something went horribly wrong: ${err}`)
-      res.write('<h1>Error</h1><p>Sorry, something went wrong. Please <a href="/validator.html">try again</a> or contact admin for help.</p>')
+      res.write('<h1>Error</h1><p>Sorry, something went wrong. Please <a href="/express/metadatagen/validator.html">try again</a> or contact admin for help.</p>')
       res.end()
     })
     .finally(()=> exiftool.end())
