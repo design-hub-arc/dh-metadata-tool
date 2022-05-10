@@ -1,25 +1,23 @@
 const express = require('express')
 const app = express()
 const path = require('path')
-const PORT = process.env.PORT || 5455
+const PORT = process.env.PORT || 54555
 const fs = require('fs')
-const http = require('http')
-const { response } = require('express')
-const { json } = require('express/lib/response')
+// const http = require('http')
 const ExifTool = require('exiftool-vendored').ExifTool
 const exiftool = new ExifTool({ taskTimeoutMillis: 5000 })
-// const https = require('https')
+const https = require('https')
 
-// const key = 'path-to-key'
-// const cert = 'path-to-cert'
+const key = fs.readFileSync('/var/local/ssl/selfsigned.key','utf8')
+const cert = fs.readFileSync('/var/local/ssl/selfsigned.crt','utf8')
 
-// const serverOptions = ({
-//   key: key,
-//   cert: cert
-// })
+const serverOptions = ({
+  key: key,
+  cert: cert
+})
 
-// const server = https.createServer(serverOptions, app)
-const server = http.createServer(app)
+const server = https.createServer(serverOptions, app)
+// const server = http.createServer(app)
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json())
@@ -113,4 +111,4 @@ app.post('/meta-read', (req, res) => {
     .finally(()=> exiftool.end())
 })
 
-server.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`))
+server.listen(PORT, () => console.log(`Listening on https://localhost:${PORT}`))
