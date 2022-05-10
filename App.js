@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 54555
 const fs = require('fs')
 // const http = require('http')
 const ExifTool = require('exiftool-vendored').ExifTool
-const exiftool = new ExifTool({ taskTimeoutMillis: 5000 })
+const exiftool = new ExifTool({ taskTimeoutMillis: 8000 })
 const https = require('https')
 
 const key = fs.readFileSync('/var/local/ssl/selfsigned.key','utf8')
@@ -30,9 +30,15 @@ app.get('/', (req, res) => {
 //   res.sendFile('validator.html')
 // })
 app.post('/meta-data', (req, res) => {
+  let locationString = (req.body.urlToFile).replaceAll("%20", " ").substr(46, (req.body.urlToFile).length)
+
   exiftool
-  .write(req.body.urlToFile, {Copyright: req.body.copyright, CopyrightNotice: req.body.copyright, Author: req.body.author, XPAuthor: req.body.author, XPComment: req.body.comments })
-  .catch((err) => console.error("Something terrible happened: ", err))
+  .write(`/home1/designhub/dh_url_generator/production/dh-url-generator${locationString}`, {Copyright: req.body.copyright, CopyrightNotice: req.body.copyright, Author: req.body.author, XPAuthor: req.body.author, XPComment: req.body.comments })
+  .catch((err) => {
+    console.error("Something terrible happened: ", err)
+    res.write('<h1>Error</h1><p>Sorry, something went wrong. Please <a href="/">try again</a> or contact admin for help.</p>')
+    res.end()
+  })
   .finally(() => exiftool.end())
 
   let response = `
@@ -66,9 +72,9 @@ app.post('/meta-data', (req, res) => {
 })
 
 app.post('/meta-read', (req, res) => {
-  console.log(req.body.urlToFile)
+  let locationString = (req.body.urlToFile).replaceAll("%20", " ").substr(46, (req.body.urlToFile).length)
   exiftool
-    .read(req.body.urlToFile)
+    .read(`/home1/designhub/dh_url_generator/production/dh-url-generator${locationString}`)
     .then((tags) => {
       const arr = Object.entries(tags)
       res.write(`<!DOCTYPE html>
@@ -107,7 +113,11 @@ app.post('/meta-read', (req, res) => {
       `)  
       res.end()
     })
-    .catch((err) => console.error(`Oops, something went horribly wrong: ${err}`))
+    .catch((err) => {
+      console.error(`Oops, something went horribly wrong: ${err}`)
+      res.write('<h1>Error</h1><p>Sorry, something went wrong. Please <a href="/validator.html">try again</a> or contact admin for help.</p>')
+      res.end()
+    })
     .finally(()=> exiftool.end())
 })
 
