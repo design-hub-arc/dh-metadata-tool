@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./index.css">
+  <title>Design Hub Meta-Data Generator</title>
+</head>
+<body>
+  <main>
+    <aside>
+      <img src="./image/design-hub-logo.png" alt="design hub logo">
+    </aside>
+    <div class="container">
+      <h1>Meta-Data Generator</h1>
+      <div class="validator-choice">
+        <p>(Want to display a file's meta-data instead? Use the <a href="/validator.html">Meta-Data Validator</a> )</p>
+      </div>
+      <form id="uploadForm" method="POST" action="/meta-data">
+        <div class="input-group">
+          <label for="urlToFile">URL to File</label>
+          <input type="text" name="urlToFile" id="urlToFile" placeholder="Your URL" required>
+        </div>
+        <div class="input-group">
+          <label for="copyright">Copyright Info</label>
+          <input type="text" name="copyright" id="copyright" placeholder="Copyright info" required>
+        </div>
+        <div class="input-group">
+          <label for="author">Author</label>
+          <input type="text" name="author" id="author" placeholder="Author's Name" required>
+        </div>
+        <div class="input-group">
+          <label for="comments">Comments</label>
+          <input type="text" name="comments" id="comments" placeholder="Any additional comments" required>
+        </div>
+        <div class="form-submit">
+          <button class="submit-btn" type="submit" value="Upload" >Upload</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</body>
+</html>
